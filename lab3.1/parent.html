@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Size in % of the Parent</title>
+  <style>
+    #outer-div {
+      width: 600px;
+      text-align: center;
+      border: 3px dashed #66ccff;
+      padding: 20px;
+      margin: 30px auto;
+    }
+
+    #inner-div {
+      width: 50%;
+      text-align: center;
+      margin: 0 auto;
+      line-height: 50px;
+      border: 2px solid #003366;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="outer-div">
+    I am outer-div -> 600px
+    <div id="inner-div">
+      I am div with 50% from #outer-div
+    </div>
+  </div>
+
+</body>
+</html>

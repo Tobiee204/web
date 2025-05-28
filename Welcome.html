@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Neon Welcome Page</title>
+  <link href="https://fonts.googleapis.com/css2?family=Audiowide&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      margin: 0;
+      height: 100%;
+      overflow: hidden;
+      background: black;
+      font-family: 'Audiowide', sans-serif;
+      color: #0ff;
+    }
+
+    /* Neon menu */
+    nav {
+      position: absolute;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      color: #0ff;
+      text-decoration: none;
+      font-size: 20px;
+      text-shadow: 0 0 5px #0ff, 0 0 10px #0ff;
+      transition: 0.3s;
+    }
+
+    nav a:hover {
+      color: #f0f;
+      text-shadow: 0 0 5px #f0f, 0 0 20px #f0f;
+    }
+
+    /* Center content */
+    .wrap {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 64px;
+      margin: 0;
+      filter: url(#glow);
+      animation: slideDown 1.5s ease-out forwards;
+      opacity: 0;
+    }
+
+    p {
+      font-size: 24px;
+      color: #fff;
+      animation: fadeIn 2s ease-in forwards;
+      animation-delay: 1s;
+      opacity: 0;
+      filter: url(#glow);
+    }
+
+    @keyframes slideDown {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Glow filter */
+    svg {
+      position: absolute;
+      width: 0;
+      height: 0;
+    }
+
+    /* Background circles */
+    .bg-svg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0,255,255,0.3), transparent 70%);
+      animation: float 10s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 0.5; }
+      50% { transform: translateY(-50px); opacity: 1; }
+      100% { transform: translateY(0); opacity: 0.5; }
+    }
+
+    /* Click ripple */
+    .ripple {
+      position: absolute;
+      border: 2px solid #0ff;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      animation: ripple 0.8s ease-out;
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      from { width: 0; height: 0; opacity: 0.6; }
+      to { width: 150px; height: 150px; opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- SVG Glow Filter -->
+<svg>
+  <defs>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+</svg>
+
+<!-- Neon Menu -->
+<nav>
+  <a href="#">Home</a>
+  <a href="#">About</a>
+  <a href="#">Projects</a>
+  <a href="#">Contact</a>
+</nav>
+
+<!-- Content -->
+<div class="wrap">
+  <h1>Hello HTML!</h1>
+  <p>I am learning <strong>HTML and CSS</strong>!</p>
+</div>
+
+<!-- Background SVG circles -->
+<div class="bg-svg" id="bg">
+  <!-- Generated dynamically by JavaScript -->
+</div>
+
+<script>
+  // Generate background neon circles
+  const bg = document.getElementById('bg');
+  for (let i = 0; i < 30; i++) {
+    const circle = document.createElement('div');
+    circle.classList.add('circle');
+    circle.style.width = `${Math.random() * 100 + 50}px`;
+    circle.style.height = circle.style.width;
+    circle.style.top = `${Math.random() * 100}%`;
+    circle.style.left = `${Math.random() * 100}%`;
+    circle.style.animationDuration = `${Math.random() * 5 + 5}s`;
+    bg.appendChild(circle);
+  }
+
+  // Click ripple effect
+  document.body.addEventListener('click', (e) => {
+    const ripple = document.createElement('div');
+    ripple.classList.add('ripple');
+    ripple.style.left = `${e.clientX}px`;
+    ripple.style.top = `${e.clientY}px`;
+    document.body.appendChild(ripple);
+    setTimeout(() => ripple.remove(), 800);
+  });
+</script>
+
+</body>
+</html>

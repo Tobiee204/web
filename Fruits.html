@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Fruits</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      transition: background 0.5s ease, color 0.5s ease;
+      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+      color: #333;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      min-height: 100vh;
+    }
+
+    /* Neon mode background & text */
+    body.day-mode {
+      background: linear-gradient(to bottom right, #e0f7fa, #ffffff);
+      color: #333;
+    }
+
+    body.night-mode {
+      background: linear-gradient(to bottom right, #002f4b, #005f6b);
+      color: #eee;
+    }
+
+    h1 {
+      width: 100%;
+      text-align: center;
+      font-size: 48px;
+      font-weight: bold;
+      color: #fff;
+      filter: url(#neon);
+      cursor: default;
+      user-select: none;
+      margin-bottom: 40px;
+    }
+
+    /* Container cho mỗi quả, tạo hiệu ứng 3D flip */
+    .fruit-box {
+      width: 220px;
+      height: 280px;
+      perspective: 1000px;
+      cursor: pointer;
+    }
+
+    /* Nội dung có thể xoay 3D */
+    .fruit-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.8s;
+      transform-style: preserve-3d;
+      border-radius: 12px;
+    }
+
+    /* Khi active (đang lật), xoay 180 độ */
+    .fruit-box.flipped .fruit-inner {
+      transform: rotateY(180deg);
+    }
+
+    /* Mặt trước */
+    .fruit-front {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      box-sizing: border-box;
+      backface-visibility: hidden;
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center; /* căn giữa dọc */
+
+      padding: 20px;
+      box-shadow: 0 0 10px #00ffff88;
+      background-color: #ffffffcc;
+      color: #333;
+      border: 4px solid;
+      border-image-slice: 1;
+      animation: neon-border 3s linear infinite;
+    }
+
+    /* Mặt sau */
+    .fruit-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      border-radius: 12px;
+      box-sizing: border-box;
+      background-color: #001f2fcc;
+      color: #0ff;
+      border: 4px solid #0ff;
+      padding: 20px;
+      backface-visibility: hidden;
+      transform: rotateY(180deg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      box-shadow: 0 0 15px #0ff;
+    }
+
+    /* Ảnh trong khung front */
+    .fruit-front img {
+      width: 100px;
+      margin-bottom: 16px;
+      transition: transform 0.3s ease;
+      user-select: none;
+    }
+
+    .fruit-front img:hover {
+      transform: scale(1.1) rotate(-2deg);
+    }
+
+    /* Text tên trái cây mặt trước */
+    .fruit-name {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    /* Text mặt sau (lợi ích) */
+    .fruit-info {
+      font-size: 14px;
+      line-height: 1.4;
+      user-select: none;
+    }
+
+    /* Hiệu ứng viền LED chạy vòng */
+    @keyframes neon-border {
+      0% {
+        border-image-source: linear-gradient(45deg, #00ffff, #00ffff 25%, #004444 25%, #004444 50%, #00ffff 50%, #00ffff 75%, #004444 75%, #004444 100%);
+      }
+      100% {
+        border-image-source: linear-gradient(405deg, #00ffff, #00ffff 25%, #004444 25%, #004444 50%, #00ffff 50%, #00ffff 75%, #004444 75%, #004444 100%);
+      }
+    }
+
+    /* Toggle button */
+    #toggle-mode {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      font-size: 24px;
+      background: #00000088;
+      border: none;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      color: #0ff;
+      cursor: pointer;
+      box-shadow: 0 0 10px #0ff;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+      z-index: 1000;
+    }
+    #toggle-mode:hover {
+      background: #00ffffcc;
+      color: #003333;
+      box-shadow: 0 0 20px #0ff;
+    }
+
+    body.night-mode .fruit-front {
+      background-color: #003a55cc;
+      color: #eee;
+      border-color: #0ff;
+      box-shadow: 0 0 15px #0ff;
+    }
+
+    body.night-mode .fruit-back {
+      background-color: #001f2fcc;
+      color: #0ff;
+      box-shadow: 0 0 15px #0ff;
+      border-color: #0ff;
+    }
+
+  </style>
+
+  <!-- SVG filter neon glow -->
+  <svg xmlns="http://www.w3.org/2000/svg" style="position:absolute; width:0; height:0;">
+    <defs>
+      <filter id="neon" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB" >
+        <feFlood flood-color="#0ff" result="flood1" />
+        <feComposite in="flood1" in2="SourceAlpha" operator="in" result="mask1" />
+        <feMorphology in="mask1" operator="dilate" radius="4" result="dilated1" />
+        <feGaussianBlur in="dilated1" stdDeviation="4" result="blurred1" />
+        <feFlood flood-color="#0ff" flood-opacity="0.7" result="flood2" />
+        <feComposite in="flood2" in2="SourceAlpha" operator="in" result="mask2" />
+        <feMorphology in="mask2" operator="dilate" radius="8" result="dilated2" />
+        <feGaussianBlur in="dilated2" stdDeviation="8" result="blurred2" />
+        <feMerge>
+          <feMergeNode in="blurred1" />
+          <feMergeNode in="blurred2" />
+          <feMergeNode in="SourceGraphic" />
+        </feMerge>
+      </filter>
+    </defs>
+  </svg>
+
+</head>
+<body class="day-mode">
+
+  <button id="toggle-mode" title="Toggle Neon Day/Night Mode">🌞</button>
+
+  <h1>Fruits</h1>
+
+  <div class="fruit-box" tabindex="0" aria-label="Apple fruit info">
+    <div class="fruit-inner">
+      <div class="fruit-front">
+        <img src="images/apple.png" alt="Apple" />
+        <div class="fruit-name">Apple</div>
+      </div>
+      <div class="fruit-back">
+        <div class="fruit-info">
+          Rich in fiber and vitamin C.<br/>
+          Helps digestion and boosts immunity.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fruit-box" tabindex="0" aria-label="Banana fruit info">
+    <div class="fruit-inner">
+      <div class="fruit-front">
+        <img src="images/banana.png" alt="Banana" />
+        <div class="fruit-name">Banana</div>
+      </div>
+      <div class="fruit-back">
+        <div class="fruit-info">
+          Great source of potassium.<br/>
+          Supports heart health and energy.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fruit-box" tabindex="0" aria-label="Kiwi fruit info">
+    <div class="fruit-inner">
+      <div class="fruit-front">
+        <img src="images/kiwi.png" alt="Kiwi" />
+        <div class="fruit-name">Kiwi</div>
+      </div>
+      <div class="fruit-back">
+        <div class="fruit-info">
+          High in vitamin C and antioxidants.<br/>
+          Enhances skin health and immunity.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="fruit-box" tabindex="0" aria-label="Orange fruit info">
+    <div class="fruit-inner">
+      <div class="fruit-front">
+        <img src="images/orange.png" alt="Orange" />
+        <div class="fruit-name">Orange</div>
+      </div>
+      <div class="fruit-back">
+        <div class="fruit-info">
+          Loaded with vitamin C.<br/>
+          Strengthens immune system and skin.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Đổi nền theo thời gian khi load trang
+    window.onload = function () {
+      const hour = new Date().getHours();
+      const body = document.body;
+
+      if (hour >= 6 && hour < 18) {
+        body.classList.remove('night-mode');
+        body.classList.add('day-mode');
+        document.getElementById('toggle-mode').textContent = '🌞';
+      } else {
+        body.classList.remove('day-mode');
+        body.classList.add('night-mode');
+        document.getElementById('toggle-mode').textContent = '🌙';
+      }
+
+      // Thêm hiệu ứng âm thanh khi hover ảnh
+      const imgs = document.querySelectorAll('.fruit-front img');
+      imgs.forEach(img => {
+        img.addEventListener('mouseenter', () => {
+          const audio = new Audio('sounds/pop.mp3');
+          audio.play();
+        });
+      });
+    };
+
+    // Toggle day/night mode khi click nút
+    const toggleButton = document.getElementById('toggle-mode');
+    toggleButton.addEventListener('click', () => {
+      const body = document.body;
+      if (body.classList.contains('day-mode')) {
+        body.classList.remove('day-mode');
+        body.classList.add('night-mode');
+        toggleButton.textContent = '🌙';
+      } else {
+        body.classList.remove('night-mode');
+        body.classList.add('day-mode');
+        toggleButton.textContent = '🌞';
+      }
+    });
+
+    // Xoay khung khi click
+    const boxes = document.querySelectorAll('.fruit-box');
+    boxes.forEach(box => {
+      box.addEventListener('click', () => {
+        box.classList.toggle('flipped');
+      });
+    });
+  </script>
+
+</body>
+</html>
