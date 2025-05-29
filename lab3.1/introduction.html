@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Portfolio - BTEC FPT</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+      integrity="sha512-..."
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: Arial, sans-serif;
+        background: #ffffff;
+        color: #e65100;
+        width: 90%;
+        margin: auto;
+        line-height: 1.6;
+      }
+
+      h1, h2, p {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #e65100;
+      }
+
+      .container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 20px;
+      }
+
+      header {
+        background-color: #ff9800;
+        color: #ffffff;
+        text-align: center;
+        padding: 40px 0;
+        text-transform: uppercase;
+      }
+
+      section {
+        background: #ffffff;
+        margin: 20px 0;
+        padding: 20px;
+        border-left: 5px solid #ff9800;
+        border-radius: 8px;
+        transition: all 0.8s ease;
+      }
+
+      section h2 {
+        color: #e65100;
+        font-size: 28px;
+        margin-bottom: 15px;
+        transition: 0.3s ease-in-out;
+      }
+
+      section h2:hover {
+        text-shadow: 0 0 10px #ff9800, 0 0 20px #f57c00;
+        transform: scale(1.05);
+      }
+
+      section h2::before {
+        content: "★ ";
+        color: #fb8c00;
+      }
+
+      .projects ul li {
+        list-style: square inside;
+        margin-bottom: 8px;
+        font-weight: bold;
+      }
+
+      .projects ul li:nth-child(odd) {
+        color: #e65100;
+      }
+
+      .projects ul li:nth-child(even) {
+        color: #ffb74d;
+      }
+
+      .about p::first-letter {
+        font-size: 24px;
+        font-weight: bold;
+        color: #f57c00;
+      }
+
+      .about p::first-line {
+        color: #ff9800;
+      }
+
+      a:hover {
+        color: #ff5722;
+        text-decoration: underline;
+      }
+
+      .contact p i[class*="phone"] {
+        color: #1976d2;
+      }
+
+      footer {
+        background-color: #e65100;
+        color: #ffffff;
+        text-align: center;
+        padding: 20px;
+        margin-top: 30px;
+      }
+
+      footer p:first-of-type {
+        font-weight: bold;
+        font-size: 18px;
+        color: #fff3e0;
+      }
+
+      .contact.container {
+        border-top: 3px solid #90caf9;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(50px);
+        transition: all 0.8s ease;
+      }
+
+      .reveal.active {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      #popup {
+        display: none;
+        position: fixed;
+        top: 20%;
+        left: 35%;
+        background: white;
+        border: 2px solid orange;
+        padding: 20px;
+        z-index: 1000;
+        box-shadow: 0 0 20px orange;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1><i class="fas fa-user-graduate"></i> Student Portfolio</h1>
+        <p>BTEC FPT Hanoi</p>
+      </div>
+    </header>
+
+    <section class="about container reveal">
+      <h2><i class="fas fa-address-card"></i> About Me</h2>
+      <p>Hello! I'm a passionate student at BTEC FPT...</p>
+    </section>
+
+    <section class="projects container reveal">
+      <h2><i class="fas fa-laptop-code"></i> Projects</h2>
+      <ul>
+        <li>Responsive Website Design</li>
+        <li>HTML & CSS Mini Projects</li>
+        <li>JavaScript Calculator</li>
+      </ul>
+    </section>
+
+    <section class="contact container reveal">
+      <h2><i class="fas fa-envelope"></i> Contact Me</h2>
+      <p><i class="fas fa-envelope-open-text"></i> student@example.com</p>
+      <p><i class="fas fa-phone"></i> 0123 456 789</p>
+      <button onclick="document.querySelector('#popup').style.display='block'">📬 Gửi tin nhắn</button>
+    </section>
+
+    <footer>
+      <div class="container">
+        <p><strong><i class="fas fa-school"></i> BTEC FPT Hà Nội</strong></p>
+        <p><i class="fas fa-map-marker-alt"></i> Toà BTEC FPT, Trịnh Văn Bô, Nam Từ Liêm, TP. Hà Nội</p>
+        <p><i class="fas fa-phone-alt"></i> 098 109 05 13</p>
+      </div>
+    </footer>
+
+    <div id="popup">
+      <h3>Gửi tin nhắn</h3>
+      <input type="text" placeholder="Tên bạn" style="width:100%; margin-bottom:10px;" />
+      <textarea placeholder="Nội dung..." style="width:100%"></textarea><br><br>
+      <button onclick="document.querySelector('#popup').style.display='none'">Đóng</button>
+    </div>
+
+    <audio id="clickSound" src="click.mp3" preload="auto"></audio>
+
+    <script>
+      // Typewriter
+      const text = "Hello! I'm a passionate student at BTEC FPT...";
+      const element = document.querySelector(".about p");
+      let index = 0;
+
+      function typeWriter() {
+        if (index < text.length) {
+          element.textContent += text.charAt(index);
+          index++;
+          setTimeout(typeWriter, 50);
+        }
+      }
+      element.textContent = "";
+      typeWriter();
+
+      // Scroll Reveal
+      const reveals = document.querySelectorAll(".reveal");
+      function revealOnScroll() {
+        reveals.forEach((el) => {
+          const windowHeight = window.innerHeight;
+          const elementTop = el.getBoundingClientRect().top;
+          if (elementTop < windowHeight - 100) {
+            el.classList.add("active");
+          }
+        });
+      }
+      window.addEventListener("scroll", revealOnScroll);
+      revealOnScroll();
+
+      // Click Sound
+      function playClick() {
+        document.getElementById("clickSound").play();
+      }
+    </script>
+  </body>
+</html>
