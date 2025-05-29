@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gallery Filter Demo</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <h1>🌸 Gallery Filter by Category 🌸</h1>
+
+  <!-- Filter buttons -->
+  <div class="filter-buttons">
+    <button onclick="filterImages('all')">Show All</button>
+    <button onclick="filterImages('nature')">Nature</button>
+    <button onclick="filterImages('travel')">Travel</button>
+    <button onclick="filterImages('water')">Water</button>
+  </div>
+
+  <!-- Gallery images -->
+ <div class="gallery">
+  <img src="images/forest.jpg" alt="Forest" class="nature">
+  <img src="images/beach.jpg" alt="Beach" class="travel water">
+  <img src="images/fruit.jpg" alt="Fruit" class="fruit">
+  <img src="images/city.jpg" alt="City" class="travel">
+  <img src="images/mountain.jpg" alt="Mountain" class="nature">
+  <img src="images/waterfall.jpg" alt="Waterfall" class="water">
+  <img src="images/sky.jpg" alt="Sky" class="sky nature">
+</div>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
